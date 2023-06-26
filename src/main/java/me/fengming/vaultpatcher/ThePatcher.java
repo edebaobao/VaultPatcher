@@ -28,7 +28,8 @@ public class ThePatcher {
 
             if (debug.isEnable()) {
                 return outputDebugIndo(string, method, ret, stacks, debug);
-            } else return ret;
+            }
+            if(ret != null && !ret.equals(string)) return ret;
 
         }
         return string;
