@@ -7,10 +7,8 @@ import com.google.gson.stream.JsonToken;
 import com.google.gson.stream.JsonWriter;
 import net.minecraftforge.fml.loading.FMLPaths;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -37,21 +35,31 @@ public class VaultPatcherConfig {
     }
 
     private static void writeConfig(JsonWriter jw) throws IOException {
+        jw.setIndent("  ");
+        jw.beginObject();
+        writeJsonMods(jw);
         debug.writeJson(jw);
-        jw.name("mods").beginArray();
-        jw.name("mods").endArray();
         optimize.writeJson(jw);
+        jw.endObject();
+        jw.close();
+    }
+
+    private static void writeJsonMods(JsonWriter jw) throws IOException{
+        jw.name("mods");
+        jw.beginArray();
+        jw.value("模块");
+        jw.endArray();
     }
 
     public static void readConfig() throws IOException {
         File f = configFile.toFile();
         if (Files.notExists(configFile)) {
             if (!f.getParentFile().exists()) {
-                f.getParentFile().mkdirs();
+                boolean igr = f.getParentFile().mkdirs();
             }
             Files.createFile(configFile);
-            JsonWriter jw = GSON.newJsonWriter(Files.newBufferedWriter(configFile, StandardCharsets.UTF_8));
-            writeConfig(jw);
+            JsonWriter configJsonWriter = GSON.newJsonWriter(new FileWriter(configFile.toFile()));
+            writeConfig(configJsonWriter);
         }
 
         JsonReader jr = GSON.newJsonReader(new InputStreamReader(new FileInputStream(f), StandardCharsets.UTF_8));

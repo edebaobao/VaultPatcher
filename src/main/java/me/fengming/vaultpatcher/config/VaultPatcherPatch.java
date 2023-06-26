@@ -3,14 +3,13 @@ package me.fengming.vaultpatcher.config;
 import com.google.gson.Gson;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonToken;
+import com.google.gson.stream.JsonWriter;
 import me.fengming.vaultpatcher.Utils;
 import me.fengming.vaultpatcher.VaultPatcher;
 import net.minecraft.client.resources.language.I18n;
 import net.minecraftforge.fml.loading.FMLPaths;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -42,7 +41,6 @@ public class VaultPatcherPatch {
 
     public void read(JsonReader reader) throws IOException {
         reader.beginArray();
-
         PatchInfo patchInfo = new PatchInfo();
         patchInfo.readJson(reader);
         info = patchInfo;
@@ -58,14 +56,31 @@ public class VaultPatcherPatch {
         map = m;
     }
 
+    // 初始化模块.json文件的样板键值对
+    public void writeJsonKeyValue(JsonWriter jw) throws IOException {
+        jw.beginObject();
+        jw.name("key").value("需要翻译的文本");
+        jw.name("value").value("翻译过后的文本");
+        jw.endObject();
+    }
+
     public void read() throws IOException {
         if (Files.notExists(patchFile)) {
             Files.createFile(patchFile);
+            JsonWriter jw = GSON.newJsonWriter(new FileWriter(patchFile.toFile()));
+            jw.setIndent("  ");
+            jw.beginArray();
+            PatchInfo PatchInfo = new PatchInfo();
+            PatchInfo.writeJson(jw);
+            this.writeJsonKeyValue(jw);
+            jw.endArray();
+            jw.close();
         }
         try (JsonReader jsonReader = GSON.newJsonReader(new InputStreamReader(new FileInputStream(patchFile.toFile()), StandardCharsets.UTF_8))) {
             read(jsonReader);
         }
     }
+
 
     private List<TranslationInfo> getList(String str) {
         Set<String> set = map.keySet();

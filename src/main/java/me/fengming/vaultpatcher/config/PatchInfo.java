@@ -16,7 +16,7 @@ public class PatchInfo {
     private String authors;
 
     public String getName() {
-        return name == null || name.isEmpty() ? "Unknown" : name;
+        return name == null || name.isEmpty() ? "Unknown Full File Name" : name;
     }
 
     public void setName(String name) {
@@ -24,7 +24,7 @@ public class PatchInfo {
     }
 
     public String getDesc() {
-        return desc == null || desc.isEmpty() ? "No description" : desc;
+        return desc == null || desc.isEmpty() ? "No Description" : desc;
     }
 
     public void setDesc(String desc) {
@@ -32,7 +32,7 @@ public class PatchInfo {
     }
 
     public String getMods() {
-        return mods == null || mods.isEmpty() ? "Unknown" : mods;
+        return mods == null || mods.isEmpty() ? "Unknown Translate Mod Name" : mods;
     }
 
     public void setMods(String mods) {
@@ -40,7 +40,7 @@ public class PatchInfo {
     }
 
     public String getAuthors() {
-        return authors == null || authors.isEmpty() ? "Unknown" : authors;
+        return authors == null || authors.isEmpty() ? "Unknown Author Name" : authors;
     }
 
     public void setAuthors(String authors) {
@@ -52,21 +52,11 @@ public class PatchInfo {
         reader.beginObject();
         while (reader.peek() != JsonToken.END_OBJECT) {
             switch (reader.nextName()) {
-                case "name":
-                    setName(reader.nextString());
-                    break;
-                case "desc":
-                    setDesc(reader.nextString());
-                    break;
-                case "mods":
-                    setMods(reader.nextString());
-                    break;
-                case "authors":
-                    setAuthors(reader.nextString());
-                    break;
-                default:
-                    reader.skipValue();
-                    break;
+                case "name" -> setName(reader.nextString());
+                case "desc" -> setDesc(reader.nextString());
+                case "mods" -> setMods(reader.nextString());
+                case "authors" -> setAuthors(reader.nextString());
+                default -> reader.skipValue();
             }
         }
         reader.endObject();
@@ -74,7 +64,6 @@ public class PatchInfo {
 
     public void writeJson(JsonWriter writer) throws IOException {
         writer.beginObject();
-        writer.name("patch_info");
         writer.name("name").value(getName());
         writer.name("desc").value(getDesc());
         writer.name("mods").value(getMods());

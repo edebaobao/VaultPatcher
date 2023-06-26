@@ -73,11 +73,12 @@ public class DebugMode {
     }
 
     public void writeJson(JsonWriter writer) throws IOException {
+        writer.name("debug_mode");
         writer.beginObject();
         writer.name("is_enable").value(isEnable());
-        writer.name("output_format").value(getOutputFormat());
-        writer.name("output_mode").value(getOutputMode());
         writer.name("test_mode").value(getTestMode());
+        writer.name("output_mode").value(getOutputMode());
+        writer.name("output_format").value(getOutputFormat());
         writer.endObject();
     }
 

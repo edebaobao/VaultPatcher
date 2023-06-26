@@ -69,6 +69,7 @@ public class OptimizeParams {
     }
 
     public void writeJson(JsonWriter writer) throws IOException {
+        writer.name("optimize_params");
         writer.beginObject();
         writer.name("disable_export").value(isDisableExport());
         writer.name("disable_stacks").value(isDisableStacks());
