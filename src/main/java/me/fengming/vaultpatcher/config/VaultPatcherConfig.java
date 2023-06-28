@@ -34,29 +34,25 @@ public class VaultPatcherConfig {
         return optimize;
     }
 
+
     private static void writeConfig(JsonWriter jw) throws IOException {
         jw.setIndent("  ");
         jw.beginObject();
-        writeJsonMods(jw);
+        jw.name("mods").beginArray().value("模块").endArray();
+        // debug模块写入
+        jw.name("debug_mode");
         debug.writeJson(jw);
+        // optimize模块写入
+        jw.name("optimize_params");
         optimize.writeJson(jw);
         jw.endObject();
         jw.close();
     }
 
-    private static void writeJsonMods(JsonWriter jw) throws IOException{
-        jw.name("mods");
-        jw.beginArray();
-        jw.value("模块");
-        jw.endArray();
-    }
-
     public static void readConfig() throws IOException {
         File f = configFile.toFile();
         if (Files.notExists(configFile)) {
-            if (!f.getParentFile().exists()) {
-                boolean igr = f.getParentFile().mkdirs();
-            }
+            boolean igr = f.getParentFile().mkdirs();
             Files.createFile(configFile);
             JsonWriter configJsonWriter = GSON.newJsonWriter(new FileWriter(configFile.toFile()));
             writeConfig(configJsonWriter);

@@ -68,8 +68,8 @@ public class OptimizeParams {
         reader.endObject();
     }
 
+    // config.json的optimize_params模块
     public void writeJson(JsonWriter writer) throws IOException {
-        writer.name("optimize_params");
         writer.beginObject();
         writer.name("disable_export").value(isDisableExport());
         writer.name("disable_stacks").value(isDisableStacks());

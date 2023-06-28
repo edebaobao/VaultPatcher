@@ -72,8 +72,8 @@ public class DebugMode {
         reader.endObject();
     }
 
+    // config.json的debug_mode模块
     public void writeJson(JsonWriter writer) throws IOException {
-        writer.name("debug_mode");
         writer.beginObject();
         writer.name("is_enable").value(isEnable());
         writer.name("test_mode").value(getTestMode());

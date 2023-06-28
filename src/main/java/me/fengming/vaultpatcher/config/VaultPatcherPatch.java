@@ -56,11 +56,23 @@ public class VaultPatcherPatch {
         map = m;
     }
 
-    // 初始化模块.json文件的样板键值对
+    // 初始化 模块.json文件 模板的键值对
     public void writeJsonKeyValue(JsonWriter jw) throws IOException {
+        // 第一个样例
         jw.beginObject();
-        jw.name("key").value("需要翻译的文本");
-        jw.name("value").value("翻译过后的文本");
+        jw.name("key").value("需要翻译的文本1");
+        jw.name("value").value("翻译过后的文本1");
+        jw.endObject();
+        // 第二个样例
+        jw.beginObject();
+        jw.name("target_class");
+        jw.beginObject();
+        jw.name("name").value("");
+        jw.name("method").value("");
+        jw.name("stack_depth").value(-1);
+        jw.endObject();
+        jw.name("key").value("需要翻译的文本2");
+        jw.name("value").value("翻译过后的文本2");
         jw.endObject();
     }
 
